@@ -5,9 +5,10 @@ import { Button, ButtonGroup, Flex, Grid, Heading, Link, ListItem, Stack, Text, 
 
 import { Image } from "@chakra-ui/react"
 import { useQuery } from "@tanstack/react-query";
-import { getUser } from "@/actions/user";
 import { EmailIcon, PhoneIcon } from "@chakra-ui/icons";
 import { User } from "@prisma/client";
+import { prisma } from "@db/index";
+import axios, { AxiosResponse } from "axios";
 
 interface SingleUserParams {
   params: {
@@ -15,9 +16,21 @@ interface SingleUserParams {
   }
 }
 
+async function getUser(id: User["id"]) {
+  const user: AxiosResponse<User, User> = await axios.get("http://localhost:3000/api/user", {
+    params: {
+      id
+    }
+  })
+  return user.data
+}
+
 export default function SingleUserPage({ params: { userId } }: SingleUserParams) {
   const { isLoading, data: user, isError } = useQuery({
-    queryFn: async () => await getUser(userId)
+    queryKey: ["user", userId],
+    queryFn: async () => {
+      return await getUser(userId)
+    }
   });
   if (isLoading) return <Heading>Loading...</Heading>
   return (
