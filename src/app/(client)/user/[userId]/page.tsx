@@ -17,7 +17,7 @@ interface SingleUserParams {
 }
 
 async function getUser(id: User["id"]) {
-  const user: AxiosResponse<User, User> = await axios.get("http://localhost:3000/api/user", {
+  const user: AxiosResponse<User, User> = await axios.get("/api/user", {
     params: {
       id
     }
