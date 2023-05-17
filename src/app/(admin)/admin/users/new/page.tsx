@@ -47,6 +47,16 @@ const inputFields: InputField[] = [
     type: "text",
   },
   {
+    name: "description",
+    label: "Bio",
+    type: "text",
+  },
+  {
+    name: "job",
+    label: "Job",
+    type: "text",
+  },
+  {
     name: "image",
     label: "Profile image",
     type: "url",
@@ -59,15 +69,17 @@ export default function NewUser() {
     resolver: zodResolver(UserCreateInputObjectSchema)
   });
   const { mutate, isError, isLoading } = useMutation({
-    mutationFn: async (data: User) => await addUser(data),
-    mutationKey: ["users"],
-    onSuccess(data, variables, context) {
-      reset();
-    },
+    mutationKey: ["users", "new"],
+    mutationFn: async (data: User) => {
+      const user = await addUser(data);
+      console.log(user);
+      return user;
+    }
   });
   const addNewUser: SubmitHandler<User> = async (data) => {
     mutate(data);
   }
+  console.log(errors);
   return (
     <div className="min-h-[90vh] flex items-center justify-center flex-grow">
       <Form.Root className="grid gap-4" onSubmit={handleSubmit(addNewUser)}>
@@ -77,14 +89,14 @@ export default function NewUser() {
               Please enter your {field.label}
             </Form.Message>
             <Form.Control asChild>
-              <input className="px-4 py-4 rounded-lg font-[inherit!important] border-2 border-teal-500" placeholder={field.name} autoComplete="off" id={field.name} aria-autocomplete="both" {...register(field.name)} type={field.type} />
+              <input className="px-4 py-4 rounded-lg font-[inherit!important] border-2 border-teal-500" placeholder={field.name} autoComplete="on" id={field.name} aria-autocomplete="both" {...register(field.name)} type={field.type} />
             </Form.Control>
 
           </Form.Field>
         ))}
         <button style={{
-          cursor: "not-allowed"
-        }} disabled={true} type="submit" className="px-4 py-4 rounded-full mt-4 font-[inherit] bg-teal-600 text-white hover:bg-teal-700 active:bg-teal-900 transition-colors duration-300">
+          cursor: isSubmitting || isLoading ? "not-allowed" : "pointer"
+        }} disabled={isSubmitting || isLoading} type="submit" className="px-4 py-4 rounded-full mt-4 font-[inherit] bg-teal-600 text-white hover:bg-teal-700 active:bg-teal-900 transition-colors duration-300">
           {isLoading ? "Submitting" : "Submit"}
         </button>
       </Form.Root>
