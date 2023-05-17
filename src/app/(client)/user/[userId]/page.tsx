@@ -34,7 +34,7 @@ export default function SingleUserPage({ params: { userId } }: SingleUserParams)
   });
   if (isLoading) return <Heading>Loading...</Heading>
   return (
-    <EmptyServerComponent>
+    <>
       <Container>
         <Flex direction={["column", "column", "row"]} pt="12">
           <Image mb={["6", "6", "0"]} mr="12" src={user?.image || "https://via.placeholder.com/300x500"} rounded="lg" objectFit="contain" width={["full", "full", "300px"]} height={["400px", "450px", "auto"]} htmlWidth={"300"} htmlHeight={"400"} alt="User" />
@@ -98,6 +98,6 @@ export default function SingleUserPage({ params: { userId } }: SingleUserParams)
           </Stack>
         </Flex>
       </Container>
-    </EmptyServerComponent>
+    </>
   )
 }
