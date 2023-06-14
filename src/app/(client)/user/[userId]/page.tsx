@@ -1,38 +1,18 @@
-/* eslint-disable react/no-unescaped-entities */
-"use client";
-import { Container, EmptyServerComponent } from "@/components";
-import { Button, ButtonGroup, Flex, Grid, Heading, Link, ListItem, Stack, Text, UnorderedList } from "@chakra-ui/react";
+import { Container } from "@/components";
+import { Button, ButtonGroup, Flex, Grid, Heading, Link, ListItem, Stack, Text, UnorderedList, Image } from "@/components/chakra";
 
-import { Image } from "@chakra-ui/react"
-import { useQuery } from "@tanstack/react-query";
-import { EmailIcon, PhoneIcon } from "@chakra-ui/icons";
+import { FaEnvelope, FaPhone } from "react-icons/fa"
 import { User } from "@prisma/client";
 import { prisma } from "@db/index";
-import axios, { AxiosResponse } from "axios";
 
-interface SingleUserParams {
+export interface SingleUserParams {
   params: {
     userId: User["id"]
   }
 }
 
-async function getUser(id: User["id"]) {
-  const user: AxiosResponse<User, User> = await axios.get("/api/user", {
-    params: {
-      id
-    }
-  })
-  return user.data
-}
-
-export default function SingleUserPage({ params: { userId } }: SingleUserParams) {
-  const { isLoading, data: user, isError } = useQuery({
-    queryKey: ["user", userId],
-    queryFn: async () => {
-      return await getUser(userId)
-    }
-  });
-  if (isLoading) return <Heading>Loading...</Heading>
+export default async function SingleUserPage({ params: { userId } }: SingleUserParams) {
+  const user = await prisma.user.findFirst({ where: { id: userId } });
   return (
     <>
       <Container>
@@ -49,7 +29,7 @@ export default function SingleUserPage({ params: { userId } }: SingleUserParams)
             </Stack>
             <UnorderedList>
               <ListItem listStyleType="none">
-                Tug'ilgan sana - <Text as="span" ml="2" fontWeight="bold">
+                Tugilgan sana - <Text as="span" ml="2" fontWeight="bold">
                   {user.birthOfDate}
                 </Text>
               </ListItem>
@@ -77,23 +57,18 @@ export default function SingleUserPage({ params: { userId } }: SingleUserParams)
                   {user.email}
                 </Text>
               </ListItem>
-              <ListItem listStyleType="none">
-                Tug'ilgan sana - <Text as="span" ml="2" fontWeight="bold">
-                  {user.birthOfDate}
-                </Text>
-              </ListItem>
             </UnorderedList>
             <ButtonGroup>
-              <Button rightIcon={<PhoneIcon />}>
+              <Button rightIcon={<FaPhone />}>
                 <Link href={`tel:${user.phoneNumber}`}>
-                  Bog'lanish
+                  Boglanish
                 </Link>
               </Button>
-              <Button rightIcon={<EmailIcon />}>
+              {/* <Button rightIcon={<FaEnvelope />}>
                 <Link href={`mailto:${user.email}`}>
                   Xabar yozish
                 </Link>
-              </Button>
+              </Button> */}
             </ButtonGroup>
           </Stack>
         </Flex>

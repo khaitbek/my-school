@@ -6,6 +6,9 @@ const nextConfig = {
   },
   typescript: {
     ignoreBuildErrors: true
+  },
+  images: {
+    domains: ["ik.imagekit.io", "placehold.co"]
   }
 }
 

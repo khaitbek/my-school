@@ -48,7 +48,6 @@ async function main() {
   //     job: "Shifokor",
   //   }
   // })
-  // console.log({ khaitbek })
   // await prisma.user.update({
   //   where: {
   //     email: "ismailovusmon@gmail.com"

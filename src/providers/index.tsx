@@ -7,10 +7,11 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache"
 
 import { extendTheme } from '@chakra-ui/react'
+import { Suspense } from "react";
 
 const theme = extendTheme({
   fonts: {
-    heading: "var(--font-montserrat)"
+    body: "var(--font-montserrat)",
   },
   initialColorMode: "dark"
 })
@@ -23,7 +24,9 @@ export default function AuthLayout({ children }: LayoutWithChildren) {
       <SessionProvider>
         <CacheProvider value={createCache({ key: "custom" })}>
           <ChakraProvider theme={theme}>
-            {children}
+            <Suspense fallback={<h1>Loading...</h1>}>
+              {children}
+            </Suspense>
           </ChakraProvider>
         </CacheProvider>
       </SessionProvider>

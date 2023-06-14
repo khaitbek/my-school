@@ -1,10 +1,10 @@
-import '../globals.css';
 import { MainLayout } from "@/layouts";
 import { Montserrat } from 'next/font/google'
 import { type LayoutWithChildren } from "@/types";
 import AuthLayout from "@/providers";
+import '../globals.css';
 
-const montserrat = Montserrat({ subsets: ["latin", "cyrillic"], variable: "--font-montserrat" });
+// const montserrat = Montserrat({ subsets: ["latin", "cyrillic"], variable: "--font-montserrat" });
 
 export const metadata = {
   title: 'Create Next App',
@@ -16,7 +16,7 @@ export default function RootLayout({
 }: LayoutWithChildren) {
   return (
     <html lang="en">
-      <body className={`${montserrat.className} ${montserrat.variable}`}>
+      <body>
         <AuthLayout>
           <MainLayout>
             {children}

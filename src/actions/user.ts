@@ -1,20 +1,21 @@
+import {
+  UserUpdateOneSchema,
+  UserWhereUniqueInputObjectSchema,
+} from "@db/generated/schemas";
 "use server";
 
 import { prisma } from "@db/index";
 import { User } from "@prisma/client";
-
-export async function getUsers() {
-  return await prisma.user.findMany();
-}
-
-export async function getUser(id: User["id"]) {
-  return await prisma.user.findFirst({
-    where: {
-      id
-    }
-  });
-}
+import { z } from "zod";
 
 export async function addUser(user: User) {
-  await prisma.user.create({ data: user })
+  return await prisma.user.create({ data: user });
+}
+
+export async function deleteUser(
+  where: z.infer<typeof UserWhereUniqueInputObjectSchema>
+) {
+  return await prisma.user.delete({
+    where,
+  });
 }
